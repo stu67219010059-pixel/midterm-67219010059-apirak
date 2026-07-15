@@ -43,6 +43,98 @@
   ::-webkit-scrollbar-track{background:var(--ink);}
   ::-webkit-scrollbar-thumb{background:var(--panel-2); border-radius:8px; border:2px solid var(--ink);}
 
+  /* ---------- NAV ---------- */
+  .topnav{
+    position:sticky; top:0; z-index:40;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px;
+    background:rgba(8,12,20,0.72);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .topnav .brand{
+    font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--emerald);
+    display:flex; align-items:center; gap:8px;
+  }
+  .topnav .brand::before{content:"●"; font-size:9px; animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:.4;} 50%{opacity:1;}}
+  .topnav .links{display:flex; gap:22px;}
+  .topnav .links a{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--muted);
+    text-decoration:none; letter-spacing:.03em; position:relative; padding:4px 0;
+    transition:color .2s ease;
+  }
+  .topnav .links a::after{
+    content:""; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:var(--amber); transition:width .25s ease;
+  }
+  .topnav .links a:hover{color:var(--text);}
+  .topnav .links a:hover::after{width:100%;}
+  @media (max-width:560px){ .topnav .links{gap:14px;} .topnav .brand span{display:none;} }
+
+  /* ---------- QUICK FACTS ---------- */
+  .facts{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:12px;
+    margin-top:18px;
+  }
+  .fact{
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:14px 12px; text-align:center;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .fact:hover{border-color:var(--amber); transform:translateY(-2px);}
+  .fact .n{
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:20px;
+    color:var(--amber); display:block;
+  }
+  .fact .l{font-size:11px; color:var(--muted); margin-top:2px; display:block;}
+  @media (max-width:560px){ .facts{grid-template-columns:1fr 1fr;} }
+
+  /* ---------- STARS ---------- */
+  .stars{display:flex; gap:3px; margin-top:10px;}
+  .stars svg{width:14px; height:14px;}
+  .stars svg.on{fill:var(--amber);}
+  .stars svg.off{fill:none; stroke:var(--line-strong); stroke-width:1.5px;}
+
+  /* ---------- VINYL DECOR ---------- */
+  .track .vinyl-row{display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+  .vinyl{
+    width:34px; height:34px; border-radius:50%; flex:0 0 auto;
+    background:radial-gradient(circle at center, var(--ink) 0 5px, var(--emerald) 6px 7px, var(--panel-2) 8px 100%);
+    border:1px solid var(--line-strong);
+    transition:transform .6s linear;
+  }
+  .track:hover .vinyl{transform:rotate(180deg);}
+  .track .now-badge{
+    font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted);
+    letter-spacing:.05em; text-transform:uppercase;
+  }
+
+  /* ---------- BACK TO TOP ---------- */
+  .totop{
+    position:fixed; right:22px; bottom:22px; z-index:40;
+    width:44px; height:44px; border-radius:50%;
+    background:var(--panel-2); border:1px solid var(--line-strong);
+    color:var(--emerald); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; opacity:0; pointer-events:none; transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease, border-color .2s ease;
+    text-decoration:none; font-size:18px;
+    box-shadow:0 10px 24px -12px rgba(0,0,0,.6);
+  }
+  .totop.show{opacity:1; pointer-events:auto; transform:translateY(0);}
+  .totop:hover{border-color:var(--amber);}
+
+  /* ---------- SPARKLE ---------- */
+  .spark{
+    position:fixed; width:5px; height:5px; border-radius:50%;
+    background:var(--amber); pointer-events:none; z-index:60;
+    animation:sparkfade .7s ease-out forwards;
+  }
+  @keyframes sparkfade{
+    0%{opacity:1; transform:scale(1);}
+    100%{opacity:0; transform:scale(0) translateY(-18px);}
+  }
+
   /* ---------- AMBIENT BACKDROP ---------- */
   .backdrop{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
   .blob{position:absolute; border-radius:50%; filter:blur(90px); opacity:.28;}
@@ -246,6 +338,14 @@
 </head>
 <body>
 <div class="progress" id="progress"></div>
+<nav class="topnav">
+  <span class="brand">บิ๊ก<span> — Profile Card</span></span>
+  <span class="links">
+    <a href="#top">โปรไฟล์</a>
+    <a href="#anime">อนิเมะ</a>
+    <a href="#songs">เพลง</a>
+  </span>
+</nav>
 <div class="backdrop">
   <div class="blob b1"></div>
   <div class="blob b2"></div>
@@ -253,7 +353,7 @@
 </div>
 <div class="kana-bg">ビッグ</div>
 
-<div class="wrap">
+<div class="wrap" id="top">
   <section class="hero reveal">
     <div class="corner tl"></div><div class="corner br"></div>
     <div class="id-card">
@@ -273,6 +373,14 @@
     </div>
   </section>
 
+  <section class="reveal" style="padding:0 0 40px;">
+    <div class="facts">
+      <div class="fact"><span class="n">5</span><span class="l">อนิเมะสุดโปรด</span></div>
+      <div class="fact"><span class="n">5</span><span class="l">เพลงในเพลย์ลิสต์</span></div>
+      <div class="fact"><span class="n">#1</span><span class="l">Bleach คือที่สุด</span></div>
+    </div>
+  </section>
+
   <hr class="rule">
 
   <section id="anime" class="reveal">
@@ -285,6 +393,7 @@
         <h3>Bleach</h3>
         <p>เรื่องราวของนักเรียนม.ปลายที่กลายเป็นนักปราบวิญญาณร้าย ต่อสู้ในโลกของสิงห์สาตัน (Soul Society) ฉากแอ็กชันดาบและพลังจิตวิญญาณจัดเต็ม</p>
         <span class="genre">Action / Supernatural</span>
+        <div class="stars"><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg></div>
       </div>
       <div class="anime-card">
         <span class="rank">02</span>
@@ -292,6 +401,7 @@
         <h3>Seraph of the End</h3>
         <p>โลกหลังหายนะที่มนุษย์ต้องเป็นทาสแวมไพร์ เรื่องราวการแก้แค้นและมิตรภาพท่ามกลางสงครามระหว่างเผ่าพันธุ์</p>
         <span class="genre">Dark Fantasy</span>
+        <div class="stars"><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="off" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg></div>
       </div>
       <div class="anime-card">
         <span class="rank">03</span>
@@ -299,6 +409,7 @@
         <h3>Fate Series</h3>
         <p>สงครามจอกศักดิ์สิทธิ์ระหว่างนักเวทย์และ Servant ในตำนาน ผสมผสานปรัชญา ความเชื่อ และแอ็กชันเหนือมนุษย์</p>
         <span class="genre">Action / Mythology</span>
+        <div class="stars"><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg></div>
       </div>
       <div class="anime-card">
         <span class="rank">04</span>
@@ -306,6 +417,7 @@
         <h3>To Love-Ru</h3>
         <p>คอมเมดี้โรแมนติกแนวเอเลี่ยนสาวสวย เต็มไปด้วยความป่วนและมุกฮาตลอดทั้งเรื่อง</p>
         <span class="genre">Romance / Comedy</span>
+        <div class="stars"><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="off" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="off" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg></div>
       </div>
       <div class="anime-card">
         <span class="rank">05</span>
@@ -313,6 +425,7 @@
         <h3>Made in Abyss</h3>
         <p>การผจญภัยลงสู่หลุมลึกลับสุดขอบโลกที่ซ่อนทั้งความงามและความโหดร้ายเอาไว้ด้วยกัน</p>
         <span class="genre">Adventure / Mystery</span>
+        <div class="stars"><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="on" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg><svg class="off" viewBox="0 0 20 20"><path d="M10 1l2.6 5.9 6.4.6-4.8 4.4L15.6 19 10 15.6 4.4 19l1.4-7.1L1 6.5l6.4-.6z"/></svg></div>
       </div>
     </div>
   </section>
@@ -326,6 +439,7 @@
     <div class="track">
       <span class="num">01</span>
       <div>
+        <div class="vinyl-row"><span class="vinyl"></span><span class="now-badge">Track</span></div>
         <h3>Yours Ever — COCKTAIL Feat. Q Flure</h3>
         <div class="frame"><iframe src="https://www.youtube.com/embed/o0U6OLenJyw" title="Yours Ever" allowfullscreen loading="lazy"></iframe></div>
       </div>
@@ -334,6 +448,7 @@
     <div class="track">
       <span class="num">02</span>
       <div>
+        <div class="vinyl-row"><span class="vinyl"></span><span class="now-badge">Track</span></div>
         <h3>Benz ดำ — YOUNGOHM</h3>
         <div class="frame"><iframe src="https://www.youtube.com/embed/QkiF57kn6RI" title="Benz ดำ" allowfullscreen loading="lazy"></iframe></div>
       </div>
@@ -342,6 +457,7 @@
     <div class="track">
       <span class="num">03</span>
       <div>
+        <div class="vinyl-row"><span class="vinyl"></span><span class="now-badge">Track</span></div>
         <h3>เป็นไรไหม — OG-ANIC x LAZYLOXY</h3>
         <div class="frame"><iframe src="https://www.youtube.com/embed/1sl1PxeU_wk" title="เป็นไรไหม" allowfullscreen loading="lazy"></iframe></div>
       </div>
@@ -350,6 +466,7 @@
     <div class="track">
       <span class="num">04</span>
       <div>
+        <div class="vinyl-row"><span class="vinyl"></span><span class="now-badge">Track</span></div>
         <h3>ความต่าง — OG-ANIC</h3>
         <div class="frame"><iframe src="https://www.youtube.com/embed/my7XIjUslLw" title="ความต่าง" allowfullscreen loading="lazy"></iframe></div>
       </div>
@@ -358,6 +475,7 @@
     <div class="track">
       <span class="num">05</span>
       <div>
+        <div class="vinyl-row"><span class="vinyl"></span><span class="now-badge">Track</span></div>
         <h3>หน้าหนาวที่แล้ว — THE TOYS</h3>
         <div class="frame"><iframe src="https://www.youtube.com/embed/E6TWhzCwvYo" title="หน้าหนาวที่แล้ว" allowfullscreen loading="lazy"></iframe></div>
       </div>
@@ -370,11 +488,14 @@
   </footer>
 </div>
 
+<a href="#top" class="totop" id="totop" aria-label="กลับขึ้นบนสุด">↑</a>
+
 <script>
   window.addEventListener('scroll', function(){
     var h = document.documentElement.scrollHeight - window.innerHeight;
     var p = h > 0 ? (window.scrollY / h) * 100 : 0;
     document.getElementById('progress').style.width = p + '%';
+    document.getElementById('totop').classList.toggle('show', window.scrollY > 400);
   });
 
   var io = new IntersectionObserver(function(entries){
@@ -383,6 +504,33 @@
     });
   }, {threshold:0.12});
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  /* nav active link highlight */
+  var navLinks = document.querySelectorAll('.topnav .links a');
+  var navSections = ['top','anime','songs'].map(function(id){ return document.getElementById(id); });
+  window.addEventListener('scroll', function(){
+    var pos = window.scrollY + 90;
+    var current = 'top';
+    navSections.forEach(function(sec){
+      if(sec && sec.offsetTop <= pos) current = sec.id;
+    });
+    navLinks.forEach(function(a){
+      a.style.color = (a.getAttribute('href') === '#' + current) ? 'var(--emerald)' : '';
+    });
+  });
+
+  /* subtle sparkle trail near hero + cards on click */
+  document.addEventListener('click', function(e){
+    for(var i=0;i<4;i++){
+      var s = document.createElement('span');
+      s.className = 'spark';
+      s.style.left = (e.clientX + (Math.random()*20-10)) + 'px';
+      s.style.top = (e.clientY + (Math.random()*20-10)) + 'px';
+      s.style.background = i % 2 ? 'var(--emerald)' : 'var(--amber)';
+      document.body.appendChild(s);
+      setTimeout(function(el){ return function(){ el.remove(); }; }(s), 700);
+    }
+  });
 </script>
 </body>
 </html>
